@@ -201,19 +201,36 @@ cython_debug/
 .cursorignore
 
 # LaTeX build artifacts
+*.acn
+*.acr
+*.alg
 *.aux
 *.bbl
 *.blg
+*.bcf
+*.dvi
 *.fdb_latexmk
 *.fls
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.lof
 *.log
+*.lot
 *.nav
 *.out
 *.pdf
+*.ps
+*.run.xml
 *.snm
+*.synctex
 *.synctex.gz
+*.thm
 *.toc
-.cursorignore
+*.xdv
+_minted*
 .cursorindexingignore
 
 # Marimo
