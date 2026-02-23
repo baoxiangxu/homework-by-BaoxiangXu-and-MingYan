@@ -221,7 +221,7 @@ cython_debug/
 *.lot
 *.nav
 *.out
-*.pdf
+# *.pdf
 *.ps
 *.run.xml
 *.snm
