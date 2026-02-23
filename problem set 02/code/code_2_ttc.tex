@@ -1,0 +1,70 @@
+def ttc_school_choice(prefs, priorities, cap):
+    pr_rank = {s: {stu: idx for idx, stu in enumerate(priorities[s])} for s in schools}
+    remaining_cap = cap.copy()
+    remaining_students = set(students)
+    matching = {i: None for i in students}
+
+    while remaining_students:
+        active_schools = [s for s in schools if remaining_cap[s] > 0]
+
+        # students point to their top active school
+        stu_to = {}
+        for i in remaining_students:
+            for s in prefs[i]:
+                if remaining_cap[s] > 0:
+                    stu_to[i] = s
+                    break
+
+        # schools point to best (highest-priority) student among those pointing to them
+        sch_to = {}
+        for s in active_schools:
+            stus = [i for i, ss in stu_to.items() if ss == s]
+            if stus:
+                stus.sort(key=lambda i: pr_rank[s][i])
+                sch_to[s] = stus[0]
+
+        # find cycles in the directed graph
+        cycles = []
+        visited = set()
+
+        for start in list(remaining_students):
+            if start in visited:
+                continue
+            path = []
+            idx = {}
+            node = start
+
+            while True:
+                if node in idx:
+                    cyc = path[idx[node]:]
+                    cycles.append(cyc)
+                    break
+
+                idx[node] = len(path)
+                path.append(node)
+                visited.add(node)
+
+                if node in remaining_students:
+                    node = stu_to[node]
+                else:
+                    node = sch_to.get(node, None)
+
+                if node is None:
+                    break
+
+        if not cycles:
+            break
+
+        # execute cycles: assign each student in cycle to their pointed school
+        for cyc in cycles:
+            cyc_students = [n for n in cyc if n in remaining_students]
+            for i in cyc_students:
+                s = stu_to[i]
+                matching[i] = s
+
+            for i in cyc_students:
+                s = matching[i]
+                remaining_students.remove(i)
+                remaining_cap[s] -= 1
+
+    return matching

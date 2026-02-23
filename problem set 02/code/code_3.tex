@@ -1,0 +1,79 @@
+
+
+def avg_rank(matching, prefs):
+    """
+    Average rank of assigned school across all students.
+    Rank: 1 = best, 2 = second, 3 = worst.
+    """
+    ranks = rank_map(prefs)
+    return sum(ranks[i][matching[i]] for i in students) / len(students)
+
+def simulate(N=1000, seed=123):
+    """
+    Run N random markets, compute average assigned-school rank for each mechanism.
+    Returns dict: {"DA": ..., "IA": ..., "TTC": ...}
+    """
+    random.seed(seed)
+    sums = {"DA": 0.0, "IA": 0.0, "TTC": 0.0}
+
+    for _ in range(N):
+        prefs = random_prefs()
+        prior = random_priorities()
+
+        da  = deferred_acceptance(prefs, prior, cap0)
+        ia  = immediate_acceptance(prefs, prior, cap0)
+        ttc = ttc_school_choice(prefs, prior, cap0)
+
+        sums["DA"]  += avg_rank(da, prefs)
+        sums["IA"]  += avg_rank(ia, prefs)
+        sums["TTC"] += avg_rank(ttc, prefs)
+
+    return {k: v / N for k, v in sums.items()}
+
+def avg_rank_results_to_latex_table(results,
+                                   caption="Average assigned-school rank (N=1000, seed=123)",
+                                   label="tab:avg_rank_seed123"):
+    """
+    Convert results dict into a LaTeX table string.
+    """
+    order = ["DA", "IA", "TTC"]
+
+    lines = []
+    lines.append(r"\begin{table}[!htbp]")
+    lines.append(r"\centering")
+    lines.append(r"\caption{" + caption + r"}")
+    lines.append(r"\label{" + label + r"}")
+    lines.append(r"\begin{tabular}{lc}")
+    lines.append(r"\hline")
+    lines.append(r"Mechanism & Avg. rank \\")
+    lines.append(r"\hline")
+
+    for mech in order:
+        lines.append(f"{mech} & {results[mech]:.4f} \\\\")
+
+    lines.append(r"\hline")
+    lines.append(r"\end{tabular}")
+    lines.append(r"\end{table}")
+
+    return "\n".join(lines)
+
+# ---- Run Part 3 and save tex ----
+N_SIM = 1000
+SEED3 = 123
+
+results = simulate(N=N_SIM, seed=SEED3)
+
+print("\nAverage assigned-school rank (lower is better):")
+for k, v in results.items():
+    print(f"{k}: {v:.4f}")
+
+tex_avg = avg_rank_results_to_latex_table(
+    results,
+    caption=f"Average assigned-school rank (N={N_SIM}, seed={SEED3})",
+    label=f"tab:avg_rank_seed{SEED3}"
+)
+
+with open("./table/table3_1.tex", "w", encoding="utf-8") as f:
+    f.write(tex_avg)
+
+print("\nSaved LaTeX table to: table3_1.tex")

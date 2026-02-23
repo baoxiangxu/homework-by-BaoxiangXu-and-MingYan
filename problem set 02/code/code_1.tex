@@ -1,0 +1,22 @@
+import random
+import itertools
+
+# -----------------------------
+# Basic market objects
+# -----------------------------
+students = [f"i{n}" for n in range(1, 19)]
+schools  = [f"s{n}" for n in range(1, 4)]
+cap0     = {s: 6 for s in schools}  # capacity: 6 each
+
+def random_prefs():
+    """Strict random preferences for each student over schools."""
+    return {i: random.sample(schools, len(schools)) for i in students}
+
+def random_priorities():
+    """Strict random priority ordering for each school over students."""
+    return {s: random.sample(students, len(students)) for s in schools}
+
+def rank_map(prefs):
+    """rank_map[i][s] = rank position of school s in student i's preference list."""
+    return {i: {sch: r+1 for r, sch in enumerate(lst)} for i, lst in prefs.items()}
+

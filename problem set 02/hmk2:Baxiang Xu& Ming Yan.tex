@@ -1,0 +1,211 @@
+\documentclass[12pt,oneside]{article}
+
+\usepackage[comma,numbers,square,sort&compress]{natbib}
+\usepackage{amsmath}
+\usepackage[linesnumbered, ruled, lined,boxed,commentsnumbered]{algorithm2e}[1]
+\usepackage{amssymb}
+\usepackage{algorithmic}
+\usepackage{fontspec}
+\usepackage{hhline}
+\usepackage{caption}
+\usepackage{graphicx}  
+\usepackage{epstopdf}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{xcolor}
+\newcommand{\red}[1]{\textcolor[rgb]{1.00,0.00,0.00}{#1}}
+\newcommand{\blue}[1]{\textcolor[rgb]{0.00,0.00,1.00}{#1}}
+\newcommand{\green}[1]{\textcolor[rgb]{0.00,1.00,0.00}{#1}}
+\newcommand{\darkblue}[1]
+{\textcolor[rgb]{0.00,0.00,0.50}{#1}}
+\newcommand{\darkgreen}[1]
+{\textcolor[rgb]{0.00,0.37,0.00}{#1}}
+\newcommand{\darkred}[1]{\textcolor[rgb]{0.60,0.00,0.00}{#1}}
+\newcommand{\brown}[1]{\textcolor[rgb]{0.50,0.30,0.00}{#1}}
+\newcommand{\purple}[1]{\textcolor[rgb]{0.50,0.00,0.50}{#1}}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor} 
+\usepackage{pythonhighlight}
+
+\usepackage{enumitem}
+
+\lstset{
+	language=Python, 
+	basicstyle=\ttfamily, 
+	breaklines=true, 
+	keywordstyle=\bfseries\color{NavyBlue}, 
+	morekeywords={}, 
+	emph={self}, 
+	emphstyle=\bfseries\color{Rhodamine}, 
+	commentstyle=\itshape\color{black!50!white}, 
+	stringstyle=\bfseries\color{PineGreen!90!black}, 
+	columns=flexible,
+	numbers=left, 
+	numbersep=2em, 
+	numberstyle=\footnotesize, 
+	frame=single, 
+	framesep=1em 
+}
+
+
+\onehalfspacing
+\geometry{left=1.0in,right=1.0in,top=1.0in,bottom=1.0in}
+\makeatother
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%beginning of the document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\setlength{\columnwidth}{17.6cm}
+\title{ECN 591 Topic: Market Design\\Homework 2}
+\author{Baoxiang Xu \and Ming Yan}
+\maketitle
+\hbox to17.5cm{\hrulefill}\par
+\maketitle
+\hbox to17.5cm{\hrulefill}\par
+
+\vspace{0.5cm}
+
+\noindent
+\textbf{File Description}
+
+\vspace{0.2cm}
+
+\noindent
+\begin{itemize}
+    \item \texttt{hmk2: Baoxiang Xu \& Ming Yan.pdf} (this file): Main submission file containing all answers, tables, and figures.
+    \item \texttt{ECN594hmk2: Baoxiang Xu \& Ming Yan.tex}: \LaTeX{} source file used to compile the PDF.
+    \item \texttt{code.ipynb}: All Python code used for simulation and analysis.
+    \item Folders \texttt{code/} and \texttt{table/}: All raw materials used to generate the results in the main file.
+    \item \texttt{pset02.pdf}: Orignal problem set assignment for reference.
+\end{itemize}
+\vspace{0.5cm}
+\hbox to17.5cm{\hrulefill}\par
+
+\newpage
+\tableofcontents
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Part 1: Market Setup
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Market Setup}
+\subsection{Question}
+Consider a school choice market with a set of students $I = \{i_1, \dots, i_{18}\}$ and a set of schools $S = \{s_1, s_2, s_3\}$. Each school $s \in S$ has a capacity of $q_s = 6$. To define the market environment, you will generate random preferences and priorities. Specifically, do the following:
+\begin{enumerate}[label=\arabic*.]
+    \item Student Preferences: For each student $i \in I$, generate a strict random preference ranking $\succ_i$ over all schools in $S$.
+    \item School Priorities: For each school $s \in S$, generate a strict random priority ordering $\succ_s$ over all students in $I$.
+\end{enumerate}
+
+\subsection{Code}
+\lstinputlisting[
+language=Python,
+caption={Python code for generating random preferences and priorities}
+]{./code/code_1.tex}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Part 2: Matching Mechanisms
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Matching Mechanisms}
+\subsection{Question}
+Implement the three matching mechanisms studied in class: (i) Deferred Acceptance (DA), (ii) Immediate Acceptance (IA), and (iii) Top Trading Cycles (TTC).
+
+For each mechanism, run it on the market you generated in Part 1. Report the final matching outcome as a clear mapping from each student to their assigned school (e.g., using a table or a list).
+\subsection{Answer}
+
+
+\input{table/table2_1.tex}
+
+\newpage
+\subsection{Code}
+\lstinputlisting[
+language=Python,
+caption={Python code for deferred acceptance matching}
+]{./code/code_2_da.tex}
+
+\lstinputlisting[
+language=Python,
+caption={Python code for immediate acceptance matching}
+]{./code/code_2_ia.tex}
+
+\lstinputlisting[
+language=Python,
+caption={Python code for top trading cycles matching}
+]{./code/code_2_ttc.tex}
+
+
+\lstinputlisting[
+language=Python,
+caption={Python code for generating LaTeX table of matching outcomes}
+]{./code/code_2_table.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Part 3: Efficiency Analysis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Efficiency Analysis}
+\subsection{Question}
+Run a simulation of your market for $N = 1,000$ iterations. In each iteration, you must:
+\begin{enumerate}[label=\arabic*.]
+    \item Generate a new set of random student preferences ($\succ_i$) and school priorities ($\succ_s$).
+    \item Run each of the three matching algorithms (DA, IA, TTC) on this newly generated market.
+    \item For each resulting match, calculate and store the rank of the assigned school for every student. The rank is the position of the assigned school in the student's preference list (e.g., 1 for the top choice, 2 for the second, etc.).
+\end{enumerate}
+
+After completing the simulations, calculate the average student rank for each mechanism, averaged across all students and all 1,000 iterations. Present your findings in a table. The table should clearly show the average rank for DA, IA, and TTC. Provide a brief interpretation of the results.
+
+\subsection{Answer}
+
+\input{table/table3_1.tex}
+
+
+\textbf{Interpretation}
+\begin{enumerate}
+	\item \textbf{Efficency Comparison}
+	\begin{itemize}
+		\item IA and TTC: The two mechanisms deliver exactly the same average rank (1.1862), and both are lower than DA’s. This indicates that, under this particular market design, IA and TTC assign students to schools closer to their stated preferences on average, with essentially identical performance on this efficiency metric.
+		\item DA: DA’s average rank is slightly higher (1.2142), implying marginally lower efficiency than IA and TTC. The difference is small—about 0.028.
+	\end{itemize}
+	\item \textbf{Consistency with theory}
+	\begin{itemize}
+		\item From a theoretical perspective, TTC is associated with strong efficiency properties (often described as Pareto efficient within its applicable framework), meaning there is no way to improve one student’s assignment without making someone else worse off. DA, by contrast, is designed to deliver a stable matching—ruling out blocking pairs—so maximizing efficiency (e.g., minimizing average rank) is not its primary objective.
+		\item 	In this simulation, IA and TTC achieve the same average efficiency, which is an interesting outcome. In school-choice settings, IA (immediate acceptance) can sometimes reduce efficiency because seats are locked in early (“first-come, first-served” across rounds). But in this symmetric market with 18 students and 3 schools (6 seats each), IA happens to match TTC’s average performance under the chosen metric.
+	\end{itemize}
+	\item \textbf{Statistical interpretation}
+	\begin{itemize}
+		\item With 1,000 iterations, the simulation averages reduce Monte Carlo noise, making the comparison reasonably stable for this setup.
+		\item All average ranks are well below 2, suggesting that—regardless of mechanism—students are very likely to receive their first or second choice in this market, implying a high overall level of satisfaction.
+	\end{itemize}
+\end{enumerate}
+
+
+
+\subsection{Code}
+\lstinputlisting[
+language=Python,
+caption={Python code for efficiency analysis simulation}
+]{./code/code_3.tex}
+
+\end{document}

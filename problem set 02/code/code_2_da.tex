@@ -1,0 +1,35 @@
+def deferred_acceptance(prefs, priorities, cap):
+    pr_rank = {s: {stu: idx for idx, stu in enumerate(priorities[s])} for s in schools}
+    held = {s: [] for s in schools}
+    next_choice = {i: 0 for i in students}
+    unassigned = set(students)
+
+    while True:
+        proposals = {s: [] for s in schools}
+        any_proposal = False
+
+        for i in list(unassigned):
+            if next_choice[i] < len(schools):
+                s = prefs[i][next_choice[i]]
+                next_choice[i] += 1
+                proposals[s].append(i)
+                any_proposal = True
+            else:
+                unassigned.remove(i)
+
+        if not any_proposal:
+            break
+
+        for s in schools:
+            cand = held[s] + proposals[s]
+            cand.sort(key=lambda st: pr_rank[s][st])  # lower index = higher priority
+            held[s] = cand[:cap[s]]
+
+        assigned = set(itertools.chain.from_iterable(held.values()))
+        unassigned = set(students) - assigned
+
+    matching = {i: None for i in students}
+    for s, lst in held.items():
+        for i in lst:
+            matching[i] = s
+    return matching

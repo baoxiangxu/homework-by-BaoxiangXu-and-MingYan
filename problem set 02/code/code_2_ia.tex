@@ -1,0 +1,27 @@
+def immediate_acceptance(prefs, priorities, cap):
+    pr_rank = {s: {stu: idx for idx, stu in enumerate(priorities[s])} for s in schools}
+    remaining_cap = cap.copy()
+    unassigned = set(students)
+    matching = {i: None for i in students}
+
+    # Round r: apply to r-th choice (r=0,1,2)
+    for r in range(len(schools)):
+        proposals = {s: [] for s in schools}
+        for i in list(unassigned):
+            s = prefs[i][r]
+            proposals[s].append(i)
+
+        for s, props in proposals.items():
+            if remaining_cap[s] == 0 or not props:
+                continue
+            props.sort(key=lambda st: pr_rank[s][st])
+            accept = props[:remaining_cap[s]]
+            for i in accept:
+                matching[i] = s
+                unassigned.remove(i)
+            remaining_cap[s] -= len(accept)
+
+        if not unassigned:
+            break
+
+    return matching

@@ -1,0 +1,51 @@
+
+def matching_to_latex_table(da, ia, ttc,
+                            caption="One-draw matching outcomes (seed=42)",
+                            label="tab:matching"):
+    # oder :i1, i2, ..., i18 
+    stus = sorted(da.keys(), key=lambda x: int(x[1:]))
+
+    lines = []
+    lines.append(r"\begin{table}[!htbp]")
+    lines.append(r"\centering")
+    lines.append(r"\caption{" + caption + r"}")
+    lines.append(r"\label{" + label + r"}")
+    lines.append(r"\begin{tabular}{lccc}")
+    lines.append(r"\hline")
+    lines.append(r"Student & DA & IA & TTC \\")
+    lines.append(r"\hline")
+
+    for i in stus:
+        lines.append(f"{i} & {da[i]} & {ia[i]} & {ttc[i]} \\\\")
+
+    lines.append(r"\hline")
+    lines.append(r"\end{tabular}")
+    lines.append(r"\end{table}")
+
+    return "\n".join(lines)
+
+if __name__ == "__main__":
+    # ---- One draw (Part 2 report) ----
+    random.seed(42)
+    prefs = random_prefs()
+    prior = random_priorities()
+
+    da  = deferred_acceptance(prefs, prior, cap0)
+    ia  = immediate_acceptance(prefs, prior, cap0)
+    ttc = ttc_school_choice(prefs, prior, cap0)
+
+    # print outcomes
+    print("One-draw matching outcomes (seed=42):")
+    print("DA :", da)
+    print("IA :", ia)
+    print("TTC:", ttc)
+
+    # ---- generate tex file ----
+    tex = matching_to_latex_table(da, ia, ttc,
+                                  caption="One-draw matching outcomes (seed=42)",
+                                  label="tab:matching_seed42")
+    out_path = "./table/table2_1.tex"
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(tex)
+
+    print(f"\nSaved LaTeX table to: {out_path}")
